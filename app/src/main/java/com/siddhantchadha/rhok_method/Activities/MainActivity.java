@@ -5,12 +5,17 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.siddhantchadha.rhok_method.APIUtils;
 import com.siddhantchadha.rhok_method.R;
+import com.siddhantchadha.rhok_method.data.SOService;
+import com.siddhantchadha.rhok_method.models.FeedResponse;
 
 import org.w3c.dom.Text;
 
@@ -18,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import mehdi.sakout.fancybuttons.FancyButton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
