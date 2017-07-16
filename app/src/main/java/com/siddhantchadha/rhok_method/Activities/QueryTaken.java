@@ -1,5 +1,7 @@
 package com.siddhantchadha.rhok_method.Activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,8 +21,17 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.siddhantchadha.rhok_method.APIUtils;
 import com.siddhantchadha.rhok_method.Fragments.ScreenShare;
+import com.siddhantchadha.rhok_method.Fragments.VideoFragment;
 import com.siddhantchadha.rhok_method.R;
+import com.siddhantchadha.rhok_method.data.SOService;
+import com.siddhantchadha.rhok_method.models.CreateResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QueryTaken extends AppCompatActivity {
 
@@ -46,6 +57,13 @@ public class QueryTaken extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(QueryTaken.this, PopupActivity.class));
+            }
+        });
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -61,8 +79,61 @@ public class QueryTaken extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:9015232421"));
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SOService mService = APIUtils.getSOService();
+                JsonObject random = new JsonObject();
+                int num = getIntent().getIntExtra("id",0);
+                random.addProperty("id",String.valueOf(num));
+                random.addProperty("set","1");
+
+                mService.getSetResponse(random).enqueue(new Callback<CreateResponse>() {
+                    @Override
+                    public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+                        if (response.isSuccessful()){
+                            startActivity(new Intent(QueryTaken.this,SignIn.class));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CreateResponse> call, Throwable throwable) {
+
+                    }
+                });
+            }
+        });
+
+        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final SOService mService = APIUtils.getSOService();
+                JsonObject random = new JsonObject();
+                int num = getIntent().getIntExtra("id",0);
+                random.addProperty("id",String.valueOf(num));
+                random.addProperty("set","0");
+
+                mService.getSetResponse(random).enqueue(new Callback<CreateResponse>() {
+                    @Override
+                    public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+                        if (response.isSuccessful()){
+                            startActivity(new Intent(QueryTaken.this,SignIn.class));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CreateResponse> call, Throwable throwable) {
+
+                    }
+                });
             }
         });
 
@@ -145,7 +216,7 @@ public class QueryTaken extends AppCompatActivity {
               case 0:
                 return new ScreenShare();
               case 1:
-                  return PlaceholderFragment.newInstance(position + 1);
+                  return new VideoFragment();
 
 
           }

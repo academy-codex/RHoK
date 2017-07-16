@@ -33,6 +33,10 @@ public interface SOService {
     Call<CreateResponse> getSignupResponse(@Body JsonObject body);
 
     @Headers("Content-Type: application/json")
+    @POST("/set/")
+    Call<CreateResponse> getSetResponse(@Body JsonObject body);
+
+    @Headers("Content-Type: application/json")
     @POST("/login/")
     Call<LoginResponse> getLoginResponse(@Body JsonObject body);
 }

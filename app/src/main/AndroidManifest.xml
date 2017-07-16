@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.siddhantchadha.rhok_method">
 
-
-
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:allowBackup="true"
@@ -30,7 +27,8 @@
         <activity
             android:name=".Activities.QueryTaken"
             android:label="@string/title_activity_query_taken"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.PopupActivity" />
     </application>
 
 </manifest>

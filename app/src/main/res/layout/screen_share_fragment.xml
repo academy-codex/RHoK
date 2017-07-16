@@ -5,17 +5,22 @@
     android:layout_height="match_parent">
 
 
-
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start/Stop" />
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/holo_red_light"
+        android:padding="10dp"
+        android:text="Start/Stop"
+        android:textColor="#fff"
+        android:textSize="15sp" />
 
     <ImageView
         android:id="@+id/skype"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/microphone" />
+        app:srcCompat="@drawable/share" />
 
 </FrameLayout>

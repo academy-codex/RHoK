@@ -9,17 +9,27 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+import com.siddhantchadha.rhok_method.APIUtils;
 import com.siddhantchadha.rhok_method.Activities.QueryTaken;
 import com.siddhantchadha.rhok_method.R;
+import com.siddhantchadha.rhok_method.data.SOService;
+import com.siddhantchadha.rhok_method.models.CreateResponse;
+import com.siddhantchadha.rhok_method.models.FeedResponse;
 import com.siddhantchadha.rhok_method.models.Query;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by siddh on 7/16/2017.
@@ -30,7 +40,7 @@ public class FeedsFragment extends Fragment {
     static ArrayList<Query> feeds = new ArrayList<Query>();
     public static int type = 0;
     static RecyclerView recyclerView;
-    static FeedsAdapter homeFeedAdapter;
+    public static FeedsAdapter homeFeedAdapter;
     DividerItemDecoration horizontalDecoration;
     Drawable horizontalDivider;
     static Context ctx;
@@ -57,6 +67,7 @@ public class FeedsFragment extends Fragment {
 
         homeFeedAdapter = new FeedsAdapter(view.getContext(), feeds, type);
         recyclerView.setAdapter(homeFeedAdapter);
+        homeFeedAdapter.notifyDataSetChanged();
 
         ctx = view.getContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -70,16 +81,31 @@ public class FeedsFragment extends Fragment {
     }
 
        ArrayList<Query> createFeedsList(int num){
-           ArrayList<Query> queryArrayList = new ArrayList<Query>();
-           for (int i=0;i<num;i++){
-               Query query = new Query();
-               query.setId(i);
-               query.setKey("random key "+ i);
-               query.setQuery("this is a "+i+" number random query");
-               queryArrayList.add(query);
-           }
+            final ArrayList<Query> queries = new ArrayList<Query>();
+//           for (int i=0;i<num;i++){
+//               Query query = new Query();
+//               query.setId(i);
+//               query.setKey("random key "+ i);
+//               query.setQuery("this is a "+i+" number random query");
+//               queryArrayList.add(query);
+//           }
+           final SOService mService = APIUtils.getSOService();
+           final JsonObject random = new JsonObject();
+           mService.getFeedResponse(random).enqueue(new Callback<FeedResponse>() {
+               @Override
+               public void onResponse(Call<FeedResponse> call, Response<FeedResponse> response) {
+                        queries.addAll(response.body().getData());
+                        Log.d("Lists", String.valueOf(queries.get(0).getQuery()));
+                         homeFeedAdapter.notifyDataSetChanged();
+               }
 
-           return queryArrayList;
+               @Override
+               public void onFailure(Call<FeedResponse> call, Throwable t) {
+
+               }
+           });
+
+           return queries;
        }
 
     private  class FeedsAdapter extends RecyclerView.Adapter<MyViewHolder> {
@@ -103,13 +129,32 @@ public class FeedsFragment extends Fragment {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
 
-            Query q= list.get(position);
+            final Query q= list.get(position);
             holder.queryTv.setText(q.getQuery());
             holder.takeQuery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent= new Intent(getActivity(), QueryTaken.class);
-                    startActivity(intent);
+
+                    final JsonObject random = new JsonObject();
+                    random.addProperty("user_key","priv3");
+                    random.addProperty("id",String.valueOf(q.getId()));
+
+                    final SOService mService = APIUtils.getSOService();
+                    mService.getTakeupResponse(random).enqueue(new Callback<CreateResponse>() {
+                        @Override
+                        public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+                            if (response.isSuccessful()){
+                                Intent intent= new Intent(getActivity(), QueryTaken.class);
+                                intent.putExtra("id",q.getId());
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CreateResponse> call, Throwable t) {
+
+                        }
+                    });
                 }
             });
 

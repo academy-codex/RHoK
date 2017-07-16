@@ -24,6 +24,7 @@
 
         <EditText
             android:layout_width="match_parent"
+            android:id="@+id/NAME"
             android:layout_height="wrap_content"
             android:hint="Name"
             android:textColor="#333"
@@ -48,6 +49,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/UNAME"
             android:hint="Username"
             android:textColor="#333"
             android:textColorHint="#666"
@@ -71,6 +73,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/PASSWORD"
             android:hint="Password"
             android:textColor="#333"
             android:textColorHint="#666"
@@ -118,6 +121,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/EMAIL"
             android:hint="Email"
             android:textColor="#333"
             android:textColorHint="#666"
@@ -140,6 +144,7 @@
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="21dp" />
+        android:layout_marginBottom="21dp"
+        />
 
 </RelativeLayout>

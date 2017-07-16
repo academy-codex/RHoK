@@ -10,14 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.siddhantchadha.rhok_method.APIUtils;
 import com.siddhantchadha.rhok_method.R;
+import com.siddhantchadha.rhok_method.data.SOService;
+import com.siddhantchadha.rhok_method.models.CreateResponse;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import mehdi.sakout.fancybuttons.FancyButton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    String key = "nonpriv";
 
     private TextView txtSpeechInput;
     private final int REQ_CODE_SPEECH_INPUT = 100;
@@ -58,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     /**
@@ -91,6 +102,25 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     txtSpeechInput.setText(result.get(0));
+                    final JsonObject random = new JsonObject();
+                    random.addProperty("key",key);
+                    random.addProperty("phone","9958069697");
+                    random.addProperty("query",result.get(0));
+
+                    final SOService mService = APIUtils.getSOService();
+                    mService.getResponses(random).enqueue(new Callback<CreateResponse>() {
+                        @Override
+                        public void onResponse(Call<CreateResponse> call, Response<CreateResponse> response) {
+                            if (response.isSuccessful()){
+                                startActivity(new Intent(MainActivity.this,QueryTaken.class));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<CreateResponse> call, Throwable throwable) {
+
+                        }
+                    });
                 }
                 break;
             }
