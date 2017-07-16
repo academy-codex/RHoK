@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.siddhantchadha.rhok_method.Fragments.FeedsFragment;
+import com.siddhantchadha.rhok_method.Fragments.ProfileFragment;
 import com.siddhantchadha.rhok_method.R;
 
 public class SignIn extends AppCompatActivity {
@@ -56,16 +57,6 @@ public class SignIn extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
 
@@ -148,7 +139,7 @@ public class SignIn extends AppCompatActivity {
                 case 0:
                     return new FeedsFragment();
                 case 1:
-                    return PlaceholderFragment.newInstance(1);
+                    return new ProfileFragment();
 
             }
             return PlaceholderFragment.newInstance(1);
@@ -166,9 +157,9 @@ public class SignIn extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Queries";
                 case 1:
-                    return "SECTION 2";
+                    return "Profile";
                 case 2:
                     return "SECTION 3";
             }
